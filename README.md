@@ -74,9 +74,9 @@ The command `nixos-generate-config` can generate an initial configuration file f
 ```sh
 # nixos-generate-config --root /mnt
 ```
-Then remove it as we only want the generated `hardware-configuration.nix` which will be at /mnt/etc/nixos/hardware-configuration.nix
+Then remove it as we only want the generated `hardware-configuration.nix` which will be at `/mnt/etc/nixos/hardware-configuration.nix`
 
-Next, copy our `configuration.nix` to  /mnt/etc/nixos/configuration.nix
+Next, copy our `configuration.nix` to  `/mnt/etc/nixos/configuration.nix`
 
 
 Finally, `cd` into `/mnt/etc/nixos` to build our configuration:
@@ -85,7 +85,7 @@ Finally, `cd` into `/mnt/etc/nixos` to build our configuration:
 # nixos-install --root /mnt --flake .#moss-nix
 ```
 
-If you need to make changes post installation configuration.nix and flake.nix are located in `/etc/nixos`:
+If you need to make changes post installation `configuration.nix` and `flake.nix` are located in `/etc/nixos`:
 ```sh
 ls /etc/nixos/
 configuration.nix  flake.lock  flake.nix  hardware-configuration.nix

@@ -1,5 +1,6 @@
 {
-  description = "A build server configuration for Nix development and packaging.";
+  description =
+    "A build server configuration for Nix development and packaging.";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/master";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
@@ -92,6 +93,7 @@
               services = {
                 tailscale.enable = true;
                 vscode-server.enable = true;
+                openssh.enable = true;
                 xserver.enable = true;
                 xserver.autorun = false;
                 xserver.displayManager.startx.enable = true;
@@ -100,6 +102,7 @@
                   settings = {
                     PermitRootLogin = "prohibit-password";
                     PasswordAuthentication = false;
+                    X11Forwarding = true;
                   };
                 };
               };

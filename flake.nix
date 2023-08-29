@@ -92,6 +92,9 @@
               services = {
                 tailscale.enable = true;
                 vscode-server.enable = true;
+                xserver.enable = true;
+                xserver.autorun = false;
+                xserver.displayManager.startx.enable = true;
                 openssh = {
                   enable = true;
                   settings = {

@@ -3,8 +3,8 @@
     "A build server configuration for Nix development and packaging.";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/master";
-    vscode-server.url = "github:nix-community/nixos-vscode-server";
     ngipkgs.url = "github:ngi-nix/ngipkgs/main";
+    vscode-server.url = "github:nix-community/nixos-vscode-server";
   };
 
   outputs = { self, nixpkgs, ngipkgs, vscode-server, ... }:

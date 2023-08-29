@@ -78,7 +78,7 @@
   # List services that you want to enable:
   virtualisation.vmware.guest.enable = true;
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  #services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

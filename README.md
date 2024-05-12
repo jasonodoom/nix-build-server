@@ -74,12 +74,8 @@ The command `nixos-generate-config` can generate an initial configuration file f
 ```sh
 # nixos-generate-config --root /mnt
 ```
-Then remove it as we only want the generated `hardware-configuration.nix` which will be at `/mnt/etc/nixos/hardware-configuration.nix`
 
-Next, copy our `configuration.nix` to  `/mnt/etc/nixos/configuration.nix`
-
-
-Finally, `cd` into `/mnt/etc/nixos` to build our configuration:
+Finally, build our configuration:
 ```sh
 # cd /mnt/etc/nixos
 # nixos-install --root /mnt --flake .#moss-nix
@@ -99,5 +95,5 @@ nixos-rebuild switch --flake .#moss-nix
 #### References
 README modified from: [Vincibean/my-nixos-installation.md](https://gist.githubusercontent.com/Vincibean/baf1b76ca5147449a1a479b5fcc9a222/raw/2822c8a6f912332ff267c06ca279c55f61172b2d/my-nixos-installation.md) 
 
-Flake modified from: [jleightcap](https://git.sr.ht/~jleightcap/nixos-config/tree/main/item/cloud) 
+Nix installation [Installing NixOS](https://nixos.org/manual/nixos/stable/#ch-installation)
 

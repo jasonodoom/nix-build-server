@@ -1,4 +1,5 @@
-{
+
+i{
   description =
     "A build server configuration for Nix development and packaging.";
   inputs = {
@@ -8,7 +9,7 @@
   };
 
   outputs = { self, nixpkgs, ngipkgs, vscode-server, ... }@inputs:
-    let hostname = "moss.nix";
+    let hostName = "moss-nix";
     in {
       nixosConfigurations = {
         moss-nix = nixpkgs.lib.nixosSystem {
@@ -16,6 +17,7 @@
           modules = [
             ./configuration.nix
             vscode-server.nixosModules.default
+            { networking.hostName = hostName; }
             ({ config, pkgs, ... }: {
               nix = {
                 settings = {
@@ -32,14 +34,7 @@
 
               programs.bash.enableCompletion = true;
               programs.bash.promptInit = ''
-                parse_git_bg() {
-                  if [[ $(git status -s 2> /dev/null) ]]; then
-                    echo -e "\033[0;31m"
-                  else
-                    echo -e "\033[0;32m"
-                  fi
-                }
-                PS1='\[\033[0;32m\]\[\033[0m\033[0;32m\]\u\[\033[0;34m\]@\[\033[0;34m\]\h \w\[$(parse_git_bg)\]$(__git_ps1)\n\[\033[0;32m\]\$\[\033[0m\]'
+              PS1="\[\033[01;34m\]\u@\[\033[01;32m\]\h \[\033[00m\]λ "
               '';
 
               users.users.moss = {
@@ -50,7 +45,8 @@
                 packages = with pkgs; [
                   curl
                   git
-                  nixfmt
+                  gh
+                  nixfmt-classic
                   senpai
                   tmux
                   screen

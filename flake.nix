@@ -7,20 +7,15 @@
     vscode-server.url = "github:nix-community/nixos-vscode-server";
   };
 
-  outputs = { self, nixpkgs, ngipkgs, vscode-server, ... }:
+  outputs = { self, nixpkgs, ngipkgs, vscode-server, ... }@inputs:
     let hostname = "moss.nix";
     in {
       nixosConfigurations = {
-        moss-nix = nixpkgs.lib.nixosSystem rec {
+        moss-nix = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             ./configuration.nix
-
-            # ngipkgs.nixosModules.flarum
-            # ngipkgs.nixosModules.pretalx
-
             vscode-server.nixosModules.default
-
             ({ config, pkgs, ... }: {
               nix = {
                 settings = {
@@ -37,14 +32,13 @@
 
               programs.bash.enableCompletion = true;
               programs.bash.promptInit = ''
-                               parse_git_bg() {
+                parse_git_bg() {
                   if [[ $(git status -s 2> /dev/null) ]]; then
                     echo -e "\033[0;31m"
                   else
                     echo -e "\033[0;32m"
                   fi
                 }
-
                 PS1='\[\033[0;32m\]\[\033[0m\033[0;32m\]\u\[\033[0;34m\]@\[\033[0;34m\]\h \w\[$(parse_git_bg)\]$(__git_ps1)\n\[\033[0;32m\]\$\[\033[0m\]'
               '';
 
@@ -64,52 +58,33 @@
                   weechat
                   wget
                   htop
+                  tailscale
                 ];
-
-                environment.systemPackages = with pkgs; [ tailscale ];
 
                 openssh.authorizedKeys = {
                   keys = [
                     # redundant with fetch below, but hard-coded for consistency
-                    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFxpNuJzotmAhJnMeFFSY21wHp9jfx6EPCftfaOzWyHt jleightcap@schnittke"
+                    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKQRbcTH0OZCQciQLgFXDqqqbc0383pXA/65JlZqpCyQ jason@theophany"
                   ];
-                  keyFiles = with builtins; [
-                    (fetchurl {
-                      url = "https://github.com/DMills27.keys";
-                      sha256 =
-                        "sha256:1swql188jhw99vbsjbi8xhdf73wmqrwdkwnxp67qy3w5lf02hp59";
-                    })
-                    (fetchurl {
-                      url = "https://github.com/chickensoupwithrice.keys";
-                      sha256 =
-                        "sha256:0j5pxqspdrvpcwc9slkmix0rdfs3j0r09mhg29anvkb3zy73nclv";
-                    })
-                    (fetchurl {
-                      url = "https://github.com/albertchae.keys";
-                      sha256 =
-                        "sha256:1wllbq80p7m4m2p021s0pkx9rqg7fii2lc8m2mn1pgcmh88zs96g";
-                    })
-                    (fetchurl {
-                      url = "https://github.com/jasonodoom.keys";
-                      sha256 =
-                        "sha256:1i65babsl8l4am8651n0ph0i9ssyqwbky5q5kq34wdxwzqv7dakd";
-                    })
-                    (fetchurl {
-                      url = "https://github.com/jleightcap.keys";
-                      sha256 =
-                        "sha256:0sgjm2j1259ck7zi13ik6sq0v032qlydy176ahavqn9qcp4fvsn2";
-                    })
-                  ];
+                  keyFiles = with builtins;
+                    [
+                      (fetchurl {
+                        url = "https://github.com/jasonodoom.keys";
+                        sha256 =
+                          "sha256:1i65babsl8l4am8651n0ph0i9ssyqwbky5q5kq34wdxwzqv7dakd";
+                      })
+                    ];
                 };
               };
 
               services = {
                 tailscale.enable = true;
                 vscode-server.enable = true;
-                openssh.enable = true;
-                xserver.enable = true;
-                xserver.autorun = false;
-                xserver.displayManager.startx.enable = true;
+                xserver = {
+                  enable = true;
+                  autorun = false;
+                  displayManager.startx.enable = true;
+                };
                 openssh = {
                   enable = true;
                   settings = {
@@ -120,12 +95,23 @@
                 };
               };
 
-              system.stateVersion = "23.05";
+              system.stateVersion = "23.11";
             })
           ];
-          specialArgs = { inherit self; };
+        };
+
+        moss-nix-aarch64 = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          crossSystem = nixpkgs.lib.systems.examples.aarch64-multiplatform;
+          modules = [
+            ./configuration.nix
+            vscode-server.nixosModules.default
+            ({ config, pkgs, ... }:
+              {
+                # Duplicate settings for aarch64
+              })
+          ];
         };
       };
-
     };
 }

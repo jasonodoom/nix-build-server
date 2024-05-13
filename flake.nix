@@ -34,7 +34,7 @@ i{
 
               programs.bash.enableCompletion = true;
               programs.bash.promptInit = ''
-              PS1="\[\033[01;34m\]\u@\[\033[01;32m\]\h \[\033[00m\]λ "
+              PS1="\[\033[01;34m\]\u@\[\033[01;32m\]\h \[\033[00m\]\w λ  "
               '';
 
               users.users.moss = {
@@ -46,6 +46,7 @@ i{
                   curl
                   git
                   gh
+                  direnv
                   nixfmt-classic
                   senpai
                   tmux

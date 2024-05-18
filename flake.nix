@@ -1,5 +1,4 @@
-
-i{
+{
   description =
     "A build server configuration for Nix development and packaging.";
   inputs = {
@@ -34,8 +33,15 @@ i{
 
               programs.bash.enableCompletion = true;
               programs.bash.promptInit = ''
-              PS1="\[\033[01;34m\]\u@\[\033[01;32m\]\h \[\033[00m\]\w λ  "
+                PS1="\[\033[01;34m\]\u@\[\033[01;32m\]\h \[\033[00m\]\W λ  "
+                source ~/.bashrc
               '';
+              environment.shellInit = ''
+                gpg-connect-agent /bye
+                export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+              '';
+
+              programs.ssh.startAgent = false;
 
               users.users.moss = {
                 isNormalUser = true;
@@ -72,6 +78,7 @@ i{
                       })
                     ];
                 };
+
               };
 
               services = {
@@ -88,8 +95,16 @@ i{
                     PermitRootLogin = "prohibit-password";
                     PasswordAuthentication = false;
                     X11Forwarding = true;
+                    StreamLocalBindUnlink = true; # https://superuser.com/questions/161973/how-can-i-forward-a-gpg-key-via-ssh-agent
                   };
                 };
+              };
+
+              services.pcscd.enable = true;
+              programs.gnupg.agent = {
+                enable = true;
+                pinentryPackage = pkgs.pinentry-curses;
+                enableSSHSupport = true;
               };
 
               system.stateVersion = "23.11";
@@ -112,3 +127,4 @@ i{
       };
     };
 }
+

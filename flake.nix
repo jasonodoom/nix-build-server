@@ -53,7 +53,7 @@
                   git
                   gh
                   direnv
-                  nixfmt-classic
+                  nixfmt-rfc-style
                   senpai
                   tmux
                   screen
